@@ -8,8 +8,11 @@ import {
   HelpCircle,
   LogOut,
   Menu,
+  Search,
+  Bell,
 } from "lucide-react";
 import AccessLogo from "../assets/accesslogo.png";
+import ImageEclipse from "../assets/image.png";
 
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,14 +23,33 @@ export const Sidebar = () => {
     <div className="relative">
       {/* Mobile Toggle Button */}
       <div className="block lg:hidden fixed top-0 left-0 z-50 p-4 bg-white w-full shadow-sm">
-        <Button
-          variant="ghost"
-          className="flex items-center gap-2"
-          onClick={toggleSidebar}
-        >
-          <Menu className="h-6 w-6" />
-          Menu
-        </Button>
+        <div className="flex justify-between items-center">
+          <div>
+            <Button
+              variant="ghost"
+              className="flex items-center gap-2"
+              onClick={toggleSidebar}
+            >
+              <Menu className="h-6 w-6" />
+            </Button>
+          </div>
+          <div className="flex items-center gap-4 text-gray-400">
+            <Button variant="ghost" size="icon">
+              <Search className="absolute ml-6 text-gray-400" />
+            </Button>
+            <Button variant="ghost" size="icon">
+              <Bell className="h-5 w-5" />
+            </Button>
+            <div className="h-8 w-01 bg-gray-400">|</div>
+            <div className="flex items-center gap-2">
+              <img
+                src={ImageEclipse}
+                alt="Profile"
+                className="h-8 w-8 rounded-full"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Overlay */}

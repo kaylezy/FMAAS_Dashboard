@@ -1,6 +1,31 @@
+import React from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon, Upload } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -20,7 +45,7 @@ import {
   Star,
   FileCheck,
   ChevronDown,
-  Calendar,
+  Calendar1,
   Search,
   MoreHorizontal,
 } from "lucide-react";
@@ -87,58 +112,146 @@ const transactionData = [
 ];
 
 const Dashboard = () => {
+  const [date, setDate] = React.useState<Date>();
+  const [open, setOpen] = React.useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    setOpen(false);
+  };
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
 
       <Sidebar />
       {/* Main Content */}
-      <div className="flex-1 p-8">
-        <div className="mb-8 flex items-center justify-between">
-          <Search className="absolute ml-6 text-gray-400" />
-          <div className="flex-1 max-w-md mx-4 bg-gray-100 rounded-md">
-            <Input
-              className="max-w-md"
-              placeholder="       Start typing here to search"
-              type="search"
-            />
-          </div>
-          <div className="flex items-center gap-4 text-gray-400">
-            <Button variant="ghost" size="icon">
-              <Settings className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Bell className="h-5 w-5" />
-            </Button>
-            <div className="h-8 w-01 bg-gray-400">|</div>
-            <div className="flex items-center gap-2">
-              <img
-                src={ImageEclipse}
-                alt="Profile"
-                className="h-8 w-8 rounded-full"
+      <div className="flex-1 p-8 mt-10 lg:mt-0">
+        <div className="hidden lg:block ">
+          <div className=" mb-8 flex items-center justify-between">
+            <Search className="absolute ml-6 text-gray-400" />
+            <div className="flex-1 max-w-md mx-4 bg-gray-100 rounded-md">
+              <Input
+                className="max-w-md"
+                placeholder="       Start typing here to search"
+                type="search"
               />
-              <div>
-                <div className="font-medium text-black">Tonye Gbobo</div>
-                <div className="text-sm text-gray-500">Facility Manager</div>
+            </div>
+            <div className="flex items-center gap-4 text-gray-400">
+              <Button variant="ghost" size="icon">
+                <Settings className="h-5 w-5" />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <Bell className="h-5 w-5" />
+              </Button>
+              <div className="h-8 w-01 bg-gray-400">|</div>
+              <div className="flex items-center gap-2">
+                <img
+                  src={ImageEclipse}
+                  alt="Profile"
+                  className="h-8 w-8 rounded-full"
+                />
+                <div>
+                  <div className="font-medium text-black">Tonye Gbobo</div>
+                  <div className="text-sm text-gray-500">Facility Manager</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
+        {/* modal section */}
         <div className="flex justify-between mb-8">
           <div>
             <h1 className="text-2xl font-semibold text-gray-400">Hi Tonye,</h1>
             <h2 className="text-3xl font-bold mt-2">Overview</h2>
           </div>
-          <div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="bg-orange-500 text-white px-4 py-5 rounded-lg mt-4"
-            >
-              Create Request
-            </Button>
-          </div>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-orange-500 text-white px-4 py-5 rounded-lg mt-4"
+              >
+                Create Request
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Create Request</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2 focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-opacity-100 ">
+                  <Input placeholder="short description" />
+                </div>
+
+                <div className="space-y-2">
+                  <Textarea
+                    placeholder="Additional Information"
+                    className="min-h-[100px]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Request type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="type1">Type 1</SelectItem>
+                      <SelectItem value="type2">Type 2</SelectItem>
+                      <SelectItem value="type3">Type 3</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between text-left font-normal"
+                      >
+                        {date ? format(date, "PPP") : "Schedule Request"}
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="border-2 border-dashed rounded-lg p-4 text-center">
+                    <Upload className="mx-auto h-8 w-8 text-gray-400" />
+                    <p className="mt-2 text-sm text-gray-500">
+                      Click to upload or drag and drop
+                    </p>
+                    <Input
+                      type="file"
+                      className="hidden"
+                      onChange={() => {
+                        // Handle file upload logic here
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className=" px-36">
+                  <Button
+                    type="submit"
+                    className=" bg-orange-500 text-white hover:bg-orange-600"
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -168,7 +281,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-between mb-4">
               <div className="text-sm text-gray-500">Avg Job Rating</div>
               <div className="p-2 bg-red-100 rounded-lg">
-                <Calendar className="h-5 w-5 text-red-500" />
+                <Calendar1 className="h-5 w-5 text-red-500" />
               </div>
             </div>
             <div className=" h-1 bg-gray-100 mt-6 mb-4" />
@@ -197,8 +310,12 @@ const Dashboard = () => {
                   Spend Analysis
                 </h3>
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold">₦65,854,431.00</span>
-                  <span className="text-red-500 text-sm">34.2% ↑</span>
+                  <span className="lg:text-2xl font-bold md:text-sm">
+                    ₦65,854,431.00
+                  </span>
+                  <span className="text-red-500 text-sm hidden lg:block">
+                    34.2% ↑
+                  </span>
                 </div>
               </div>
               <Button variant="outline" size="sm" className="text-gray-400">
@@ -231,7 +348,7 @@ const Dashboard = () => {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 w-[22rem] lg:w-full">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold">Request Trend</h3>
               <Button variant="ghost" size="icon">
@@ -307,7 +424,7 @@ const Dashboard = () => {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 w-[22rem] lg:w-full">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-lg font-semibold">Invoice Management</h3>
