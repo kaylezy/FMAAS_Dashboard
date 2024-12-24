@@ -348,7 +348,7 @@ const Dashboard = () => {
             </div>
           </Card>
 
-          <Card className="p-6 w-[22rem] lg:w-full">
+          <Card className="p-6 w-[20rem] lg:w-full">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold">Request Trend</h3>
               <Button variant="ghost" size="icon">
@@ -424,7 +424,7 @@ const Dashboard = () => {
             </div>
           </Card>
 
-          <Card className="p-6 w-[22rem] lg:w-full">
+          <Card className="p-6 w-[20rem] lg:w-full">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-lg font-semibold">Invoice Management</h3>
